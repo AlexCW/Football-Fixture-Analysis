@@ -78,7 +78,7 @@ $app->singleton(
 |
 */
 
-$app->register(App\Providers\DownloadCsvServiceProvider::class);
+$app->register(App\Providers\DownloadCsvFeatureProvider::class);
 
 /*
 |--------------------------------------------------------------------------

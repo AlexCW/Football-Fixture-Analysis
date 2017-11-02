@@ -1,11 +1,12 @@
 <?php 
 
-namespace App\Services;
+namespace App\Features;
 
 use App\Contracts\Request;
 use App\Contracts\Logger;
+use App\Contracts\Csv;
 
-class DownloadCsvService
+class DownloadCsvFeature
 {
 	/**
 	 * The client used to make the requests.. 
@@ -19,11 +20,19 @@ class DownloadCsvService
 	 */
 	private $logger;
 
-	public function __construct(Request $client, Logger $logger)
+	/**
+	 * Service used to handle the csv
+	 * @var App\Contracts\Csv
+	 */
+	private $csv;
+
+	public function __construct(Request $client, Logger $logger, Csv $csv)
 	{
 		$this->client = $client;
 
 		$this->logger = $logger;
+
+		$this->csv = $csv;
 	}
 
 	/**
@@ -33,6 +42,8 @@ class DownloadCsvService
 	 */
 	public function download($source)
 	{
+		$this->logger->info('Attempting to download from the following.', compact('source'));
+
 		return $this->client->sendGetRequest($source);
 	}
 }
