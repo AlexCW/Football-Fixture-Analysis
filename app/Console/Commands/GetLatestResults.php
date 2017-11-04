@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\Services\DownloadCsvService;
+use App\Features\DownloadCsvFeature;
 
 class GetLatestResults extends Command
 {
@@ -24,20 +24,20 @@ class GetLatestResults extends Command
 
     /**
      * The download CSV service
-     * @var App\Services\DownloadCsvService
+     * @var App\Features\DownloadCsvFeature
      */
-    protected $download_csv_service;
+    protected $download_csv_feature;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(DownloadCsvService $download_csv_service)
+    public function __construct(DownloadCsvFeature $download_csv_feature)
     {
         parent::__construct();
 
-        $this->download_csv_service = $download_csv_service;
+        $this->download_csv_feature = $download_csv_feature;
     }
 
     /**
@@ -47,6 +47,6 @@ class GetLatestResults extends Command
      */
     public function handle()
     {
-        $csv_data = $this->download_csv_service->download();
+        $csv_data = $this->download_csv_feature->download();
     }
 }
