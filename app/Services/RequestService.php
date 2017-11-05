@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -17,7 +18,7 @@ class RequestService implements Request
         $this->client = $client;
     }
 
-    public function sendGetRequest($endpoint, $conditions = array(), $headers = array())
+    public function sendGetRequest($endpoint, $conditions = array(), $headers = array()): string
     {
         try 
         {
@@ -29,7 +30,7 @@ class RequestService implements Request
 
             return $response->getBody()->getContents();
         } catch(GuzzleException $e) {
-            return false;
+            throw new Exception('There was en error retrieving the request.');
         }
     }
 }
