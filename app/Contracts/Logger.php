@@ -3,27 +3,27 @@
 interface Logger
 {
     /**
-     * sends a error message to the logger
-     * @param       $message
+     * Sends a error message to the logger
+     * @param String $message
      * @param array $data
      */
-    public function error($message, $data = array ());
+    public function error(string $message, $data = array()): bool;
 
     /**
-     * sends a info message to the logger
-     * @param       $message
+     * Sends a info message to the logger
+     * @param string $message
      * @param array $data
      *
      * @return mixed
      */
-    public function info($message, $data = array());
+    public function info(string $message, $data = array()): bool;
 
     /**
-     * sends a debug error to the logger
-     * @param       $message
+     * Sends a debug error to the logger
+     * @param string $message
      * @param array $data
      *
      * @return mixed
      */
-    public function debug($message, $data = array());
+    public function debug(string $message, $data = array()): bool;
 }

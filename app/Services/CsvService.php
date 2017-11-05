@@ -24,6 +24,6 @@ class CsvService implements Csv
 
         $reader->setDelimiter($this->delimeter);
 
-        return $reader->getRecords($columns);
+        return iterator_to_array($reader->getRecords($columns));
     }
 }
