@@ -23,24 +23,6 @@ class DownloadCsvFeatureTest extends TestCase
 	{
 		$content = $this->download_csv_feature->download('mmz4281/1718/E1.csv');
 
-		$reader = \League\Csv\Reader::createFromString($content);
-
-		$reader->setDelimiter(','); #set in Feature provider.
-
-		$reader->getHeaderOffset(1);
-
-		$keys = ['Div','Date','HomeTeam','AwayTeam','FTHG','FTAG'];
-
-		$records = $reader->getRecords($keys);
-
-		foreach ($records as $offset => $record) {
-		    foreach($keys as $key) {
-		    	$this->assertArrayHasKey($key, $record);
-		    }
-
-		    break;
-		}
-
 		$this->assertNotEmpty($content, 'The content should not be empty.');
 
 		$this->assertStringStartsWith(
@@ -48,6 +30,26 @@ class DownloadCsvFeatureTest extends TestCase
 			$content,
 			'The CSV did not startt with the expected column headers.'
 		);
+		
+		$records = $this->download_csv_feature->processData($content);
+
+		$keys = ['available', 'total', 'position_multiplier', 'name'];
+
+		$record = $records->first();
+
+		foreach($keys as $key) {
+	    	$this->assertObjectHasAttribute($key, $record, 'Class should contain the key ' . $key);
+	    }
+
+	    //Assert sorting order is correct.
+	    $records->reduce(function($prev, $next){
+	    	if(!is_null($prev)) {
+		    	$this->assertGreaterThanOrEqual(
+		    		$prev->getPercentageOfAvailablePointsWon(), 
+		    		$next->getPercentageOfAvailablePointsWon()
+		    	);
+	    	}
+	    });
 	}	
 
 	private function setupDownloadCsvFeature()

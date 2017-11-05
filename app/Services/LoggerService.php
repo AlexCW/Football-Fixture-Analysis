@@ -15,18 +15,18 @@ class LoggerService implements Logger
         $this->monolog = $monolog;
     }
 
-    public function error($message, $data = array ())
+    public function error(string $message, $data = array()): bool
     {
-        $this->monolog->error($message, $data);
+        return $this->monolog->error($message, $data);
     }
 
-    public function info($message, $data = array())
+    public function info(string $message, $data = array()): bool
     {
-        $this->monolog->info($message, $data);
+        return $this->monolog->info($message, $data);
     }
 
-    public function debug($message, $data = array())
+    public function debug(string $message, $data = array()): bool
     {
-        $this->monolog->debug($message, $data);
+        return $this->monolog->debug($message, $data);
     }
 }
