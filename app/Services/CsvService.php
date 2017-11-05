@@ -18,7 +18,7 @@ class CsvService implements Csv
         $this->delimeter = $delimeter;
     }   
 
-    public function getRows(array $columns = array())
+    public function getRows(string $content, array $columns = array()): array
     {
         $reader = Reader::createFromString($content);
 
