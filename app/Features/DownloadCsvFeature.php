@@ -5,7 +5,10 @@ namespace App\Features;
 use App\Contracts\Request;
 use App\Contracts\Logger;
 use App\Contracts\Csv;
+
+use App\Collections\Teams;
 use App\Entity\TeamScore;
+
 use Illuminate\Support\Collection;
 
 class DownloadCsvFeature
@@ -87,17 +90,13 @@ class DownloadCsvFeature
 	/**
 	 * Process the csv data
 	 * @param  string $csv_data
-	 * @return Collection
+	 * @return Teams
 	 */
 	public function processData(string $csv_data): Collection
 	{
 		$rows = $this->csv->getRows($csv_data, ['Div','Date','HomeTeam','AwayTeam','FTHG','FTAG']);
 
-		$teams = new Collection();
-
-		$teams = $teams->times(24, function($index){
-			return new TeamScore($this->table[$index], $index);
-		});
+		$teams = new Teams($this->table);
 
 		for($i = 1; $i < count($rows); $i++) {
 			$home_team = $rows[$i]['HomeTeam'];
@@ -105,7 +104,7 @@ class DownloadCsvFeature
 		    $away_team = $rows[$i]['AwayTeam'];
 
 		    $home_team = $teams->filter(function($team) use($home_team) { return $team->name == $home_team; })->first();
-		    
+
 		    $away_team = $teams->filter(function($team) use($away_team) { return $team->name == $away_team; })->first();
 
 		    if($rows[$i]['FTHG'] > $rows[$i]['FTAG']) {
@@ -120,9 +119,7 @@ class DownloadCsvFeature
     		}
 		}
 
-		return $teams->sort(function($team_one, $team_two){
-			return $team_one->getPercentageOfAvailablePointsWon() > $team_two->getPercentageOfAvailablePointsWon();
-		});
+		return $teams->sortByGreatestAvailablePointsWon();
 	}
 }
 
