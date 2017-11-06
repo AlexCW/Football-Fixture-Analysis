@@ -47,6 +47,12 @@ class GetLatestResults extends Command
      */
     public function handle()
     {
-        $csv_data = $this->download_csv_feature->download();
+        $csv_data = $this->download_csv_feature->download('mmz4281/1718/E1.csv');
+
+        $data = $this->download_csv_feature->processData($csv_data);
+
+        foreach($data as $team) {
+            $this->info($team->name . ' ' . $team->getPercentageOfAvailablePointsWon());
+        }
     }
 }
